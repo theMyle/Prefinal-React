@@ -2,17 +2,18 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
 interface productProps {
+  id: number;
   image: string;
   name: string;
   category: string;
   stock: number;
   price: number;
   quantitySelected: number;
-  quantityOnChange?: (newQuantity: number) => void;
+  quantityOnChange?: (prodIdx: number, newQuantity: number) => void;
   addToCart?(): () => void;
 };
 
-function Product({ image, name, category, stock, price, quantitySelected: quantity, quantityOnChange, addToCart }: productProps) {
+function Product({ id, image, name, category, stock, price, quantitySelected: quantity, quantityOnChange, addToCart }: productProps) {
   return (
     <div>
       <Card className="pt-0 shadow-xl">
@@ -40,9 +41,24 @@ function Product({ image, name, category, stock, price, quantitySelected: quanti
           {/* quantity & add to cart */}
           <div className="flex justify-between items-center">
             <div className="flex justify-between items-center gap-5">
-              <Button onClick={() => { if (quantityOnChange) { quantityOnChange(quantity - 1) } }}>-</Button>
+
+              <Button
+                onClick={() => {
+                  if (quantityOnChange) {
+                    if (quantity > 0)
+                      quantityOnChange(id, quantity - 1)
+                  }
+                }}>-</Button>
+
               <p>{quantity}</p>
-              <Button onClick={() => { if (quantityOnChange) { quantityOnChange(quantity + 1) } }}>+</Button>
+
+              <Button
+                onClick={() => {
+                  if (quantityOnChange) {
+                    if (quantity < stock)
+                      quantityOnChange(id, quantity + 1)
+                  }
+                }}>+</Button>
             </div>
             <Button>Cart</Button>
           </div>
@@ -56,7 +72,7 @@ function Product({ image, name, category, stock, price, quantitySelected: quanti
       {quantity > 0 &&
         <div className="flex justify-between px-4 py-2 bg-green-400 rounded-xl mt-2">
           <p>Value Total:</p>
-          <p>P{quantity * price}</p>
+          <p>P{(quantity * price).toFixed(3)}</p>
         </div>
       }
 

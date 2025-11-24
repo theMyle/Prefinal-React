@@ -2,6 +2,7 @@ import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { toast } from "sonner";
+import { moneyFormatter } from "@/utils";
 
 interface productProps {
   id: number;
@@ -16,13 +17,6 @@ interface productProps {
 };
 
 function Product({ id, image, name, category, stock, price, quantitySelected: quantity, quantityOnChange, addToCart }: productProps) {
-  const moneyFormat = new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-
   return (
     <div>
       <Card
@@ -47,7 +41,7 @@ function Product({ id, image, name, category, stock, price, quantitySelected: qu
 
           <div className="flex justify-between font-bold h-10">
             <p className="text-wrap">{name}</p>
-            <p>{moneyFormat.format(price)}</p>
+            <p>{moneyFormatter.format(price)}</p>
           </div>
 
           {/* starts/rating */}
@@ -109,7 +103,7 @@ function Product({ id, image, name, category, stock, price, quantitySelected: qu
         ?
         (<div className="flex justify-between px-4 py-2 bg-gray-200 rounded-md mt-2">
           <p>Value Total:</p>
-          <p>{moneyFormat.format(quantity * price)}</p>
+          <p>{moneyFormatter.format(quantity * price)}</p>
         </div>)
         :
         (<div className="bg-transparent h-12"></div>)

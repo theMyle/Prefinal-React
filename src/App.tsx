@@ -5,14 +5,16 @@ import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./components/ui/select";
 import { productCategories, productDb, type IProduct } from "./db/productDb";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, Trash } from "lucide-react";
+import { Dialog, DialogTrigger } from "./components/ui/dialog";
+import { moneyFormatter } from "./utils";
+import Cart from "./components/cart";
 
 function App() {
   const [products, setProducts] = useState<IProduct[]>(productDb);
   const [cart, setCart] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState(productCategories);
   const [filter, setFilter] = useState("all");
-
   const [searchField, setSearchField] = useState("");
   const [searchBar, setSearchBar] = useState("");
 
@@ -21,6 +23,22 @@ function App() {
       const newProducts = [...prev];
       newProducts[productIdx].quantitySelected = value;
       return newProducts;
+    });
+  }
+
+  function quantityOnChangeCart(productIdx: number, value: number) {
+    setCart((prev) => {
+      const newCart = [...prev];
+      const itemIdx = newCart.findIndex(i => i.id === productIdx);
+      if (itemIdx >= 0) {
+        if (newCart[itemIdx].quantitySelected + value > 0) {
+          newCart[itemIdx] = {
+            ...newCart[itemIdx],
+            quantitySelected: newCart[itemIdx].quantitySelected + value,
+          }
+        }
+      }
+      return newCart;
     });
   }
 
@@ -49,12 +67,16 @@ function App() {
     })
   }
 
+  function removeFromCart(prodId: number) {
+    setCart(p => p.filter(item => item.id !== prodId));
+  }
+
   return (
     <div className="flex flex-col items-center h-screen gap-5">
 
       {/* nav bar on top */}
       <div className="sticky top-0 flex justify-between w-full p-4 px-6 shadow-sm items-center bg-white">
-        <h1>P.M.A</h1>
+        <h1 className="font-bold">P.M.A</h1>
         <div className="text-sm flex items-center">
           <Input
             type="search"
@@ -74,16 +96,28 @@ function App() {
             Search
           </Button>
         </div>
-        <Button>
-          <ShoppingCart />
-          View Cart (
-          {cart.reduce((acc, curr) => curr.quantitySelected + acc, 0)}
-          )
-        </Button>
+
+        <Dialog>
+          <DialogTrigger>
+            <Button>
+              <ShoppingCart />
+              View Cart
+              ({cart.reduce((acc, curr) => curr.quantitySelected + acc, 0)})
+            </Button>
+          </DialogTrigger>
+          <Cart
+            cart={cart}
+            quantityOnChange={quantityOnChangeCart}
+            removeFromCart={removeFromCart}
+            moneyFormatter={moneyFormatter}
+          />
+        </Dialog>
+
       </div>
+      {/* nav bar on top */}
 
       {/* product list component/container */}
-      <div className="flex flex-col gap-2 w-full px-30 pb-5">
+      <div className="flex flex-col gap-2 w-full px-30">
 
         <div className="flex justify-between w-full">
           <Select
@@ -109,6 +143,7 @@ function App() {
             </SelectContent>
           </Select>
 
+          {/* TODO */}
           <Button>Add New Product</Button>
         </div>
 
@@ -138,10 +173,12 @@ function App() {
           </div>
         </div>
       </div>
+      {/* product list component/container */}
 
       <footer className="flex w-full">
-        <div className="flex justify-between">
+        <div className="flex justify-end gap-2 py-1 w-full px-4 text-xs italic">
           <p>John Kyle J. Desamparo</p>
+          <p>theMyle</p>
           <p>2025</p>
         </div>
       </footer>

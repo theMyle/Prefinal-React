@@ -5,10 +5,11 @@ import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./components/ui/select";
 import { productCategories, productDb, type IProduct } from "./db/productDb";
-import { Search, ShoppingCart, Trash } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { Dialog, DialogTrigger } from "./components/ui/dialog";
 import { moneyFormatter } from "./utils";
-import Cart from "./components/cart";
+import CartDialog from "./components/CartDialog";
+import NewItemDialog from "./components/NewItemDialog";
 
 function App() {
   const [products, setProducts] = useState<IProduct[]>(productDb);
@@ -81,7 +82,7 @@ function App() {
           <Input
             type="search"
             placeholder="Search"
-            className="w-60 rounded-r-none border-r-0"
+            className="w-100 rounded-r-none border-r-0"
             onChange={(e) => {
               e.target.value === "" ?
                 setSearchBar("") :
@@ -105,7 +106,7 @@ function App() {
               ({cart.reduce((acc, curr) => curr.quantitySelected + acc, 0)})
             </Button>
           </DialogTrigger>
-          <Cart
+          <CartDialog
             cart={cart}
             quantityOnChange={quantityOnChangeCart}
             removeFromCart={removeFromCart}
@@ -144,7 +145,12 @@ function App() {
           </Select>
 
           {/* TODO */}
-          <Button>Add New Product</Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button>Add New Product</Button>
+            </DialogTrigger>
+            <NewItemDialog />
+          </Dialog>
         </div>
 
         <div className="border border-gray-300 px-4 py-6 rounded-xl flex flex-col gap-4">

@@ -6,26 +6,21 @@ export interface IProduct {
     stock: number;
     price: number;
     quantitySelected: number;
+    specs: string;
 }
 
 export const productDb: IProduct[] = [
-
-    // {
-    //     image: "none",
-    //     name: "Wireless Earbuds",
-    //     category: "electronics",
-    //     stock: 0,
-    //     price: 60.50,
-    //     quantitySelected: 0
-    // },
-
     {
         image: "/AppleMacMiniM4.jpg",
         name: "Apple Mac Mini M4",
         category: "desktop",
         stock: 100,
         price: 36990,
-        quantitySelected: 0
+        quantitySelected: 0,
+        specs: `CPU: M4 Chip 8-core
+        RAM: 16GB
+        Storage: 512GB SSD
+        OS: macOS Sonoma`
     },
     {
         image: "/AppleWatchSE.webp",
@@ -33,24 +28,37 @@ export const productDb: IProduct[] = [
         category: "wearables",
         stock: 90,
         price: 9900,
-        quantitySelected: 0
+        quantitySelected: 0,
+        specs: `Display: 1.78-inch Retina
+        Connectivity: GPS + Cellular
+        Battery: 18 hours
+        Sensors: Heart rate, SpO2, Accelerometer`
     },
     {
         image: "/AppleIphone16.webp",
-        name: "Apple Iphone 16",
+        name: "Apple iPhone 16",
         category: "phones",
         stock: 80,
         price: 49990,
-        quantitySelected: 0
+        quantitySelected: 0,
+        specs: `Display: 6.7-inch OLED
+        CPU: A18 Bionic
+        Storage: 256GB
+        Camera: 48MP + 12MP Dual`
     },
     {
         image: "/AppleIphone17Pro.webp",
-        name: "Apple Iphone 17 Pro",
+        name: "Apple iPhone 17 Pro",
         category: "phones",
         stock: 55,
         price: 85990,
-        quantitySelected: 0
+        quantitySelected: 0,
+        specs: `Display: 6.7-inch OLED ProMotion
+        CPU: A19 Bionic
+        Storage: 512GB
+        Camera: 48MP + 12MP + 12MP Triple`
     },
+
 ];
 
 for (let i = 0; i < productDb.length; i++) {

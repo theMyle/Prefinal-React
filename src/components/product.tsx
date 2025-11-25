@@ -102,9 +102,17 @@ function Product({
         </div>
 
         <CardContent className="w-65 px-4">
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-sm items-center">
             <p>{category}</p>
-            <p>Stocks: {stock}</p>
+            {stock < 5 ?
+              <p className="bg-orange-200 px-2 py-1 rounded-xl">
+                Low Stock
+              </p>
+              :
+              <p className="px-2 py-1 rounded-xl">
+                Stocks: {stock}
+              </p>
+            }
           </div>
 
           <div className="flex justify-between font-bold h-10">
